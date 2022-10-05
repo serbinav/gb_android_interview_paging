@@ -1,7 +1,7 @@
 package com.example.pagingroom.repository
 
-import com.example.pagingroom.model.ResponseDTO
+import com.example.pagingroom.model.JsonDTO
 
 interface RedditRepository {
-    suspend fun getRedditNews(): ResponseDTO?
+    suspend fun getRedditNews(after: String?, limit: Int): JsonDTO?
 }
