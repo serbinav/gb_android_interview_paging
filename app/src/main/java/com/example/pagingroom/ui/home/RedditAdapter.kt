@@ -2,17 +2,16 @@ package com.example.pagingroom.ui.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pagingroom.databinding.ItemRedditBinding
 import com.example.pagingroom.model.ChildrenDataDTO
 import com.example.pagingroom.usePicassoToLoadPhoto
 import com.squareup.picasso.Picasso
 
-class RedditAdapter(
-    private val onItemClick: () -> Unit
-) : ListAdapter<ChildrenDataDTO, RedditAdapter.RedditViewHolder>(RedditItemCallback()) {
+class RedditAdapter :
+    PagingDataAdapter<ChildrenDataDTO, RedditAdapter.RedditViewHolder>(POST_DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RedditViewHolder {
         val binding =
@@ -21,7 +20,10 @@ class RedditAdapter(
     }
 
     override fun onBindViewHolder(holder: RedditViewHolder, position: Int) {
-        holder.bind(currentList[position])
+        val tile = getItem(position)
+        if (tile != null) {
+            holder.bind(tile)
+        }
     }
 
     inner class RedditViewHolder(private val binding: ItemRedditBinding) :
@@ -33,20 +35,29 @@ class RedditAdapter(
                 btnStar.text = data.data.scoreStar.toString()
 
                 if (data.data.thumbnailImage.isNotEmpty()) {
-                    usePicassoToLoadPhoto(image, data.data.thumbnailImage, Picasso.Priority.HIGH)
+                    usePicassoToLoadPhoto(
+                        image,
+                        data.data.thumbnailImage,
+                        Picasso.Priority.HIGH
+                    )
                 }
-                btnMessage.setOnClickListener { onItemClick.invoke() }
             }
         }
     }
-}
 
-class RedditItemCallback : DiffUtil.ItemCallback<ChildrenDataDTO>() {
-    override fun areItemsTheSame(oldItem: ChildrenDataDTO, newItem: ChildrenDataDTO): Boolean {
-        return oldItem.kind == newItem.kind
-    }
+    companion object {
+        private val POST_DIFF_CALLBACK = object : DiffUtil.ItemCallback<ChildrenDataDTO>() {
+            override fun areItemsTheSame(
+                oldItem: ChildrenDataDTO,
+                newItem: ChildrenDataDTO
+            ): Boolean =
+                oldItem.kind == newItem.kind
 
-    override fun areContentsTheSame(oldItem: ChildrenDataDTO, newItem: ChildrenDataDTO): Boolean {
-        return oldItem == newItem
+            override fun areContentsTheSame(
+                oldItem: ChildrenDataDTO,
+                newItem: ChildrenDataDTO
+            ): Boolean =
+                oldItem == newItem
+        }
     }
 }
