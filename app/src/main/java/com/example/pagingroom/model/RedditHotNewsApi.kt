@@ -10,5 +10,5 @@ interface RedditHotNewsApi {
     suspend fun getHotNews(
         @Query("after") after: String?,
         @Query("limit") limit: Int = 25
-    ): Response<ResponseDTO>
+    ): Response<JsonDTO>
 }

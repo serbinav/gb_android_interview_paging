@@ -2,7 +2,9 @@ package com.example.pagingroom.model
 
 import com.google.gson.annotations.SerializedName
 
-class DataChildrenDTO (
+class EndUnitDTO (
+    @SerializedName("id")
+    val id: String,
     @SerializedName("thumbnail")
     val thumbnailImage: String,
     @SerializedName("num_comments")

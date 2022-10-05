@@ -6,5 +6,5 @@ data class ChildrenDataDTO (
     @SerializedName("kind")
     val kind: String,
     @SerializedName("data")
-    val data: DataChildrenDTO
+    val data: EndUnitDTO
 )
